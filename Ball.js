@@ -3,10 +3,12 @@ function Ball(x, y, velX, velY) {
 	this.y = y;
 	this.radius = 10;
 	this.velX = velX;
-	this.velY = velY
+	this.velY = velY;
+	this.lives = 3;
 }
 
 Ball.prototype.move = function () {
+
 	// Bounce off the sides
 	if (this.x > canvas.width - this.radius || this.x < this.radius) {
 		this.velX = -(this.velX);		
@@ -16,10 +18,27 @@ Ball.prototype.move = function () {
 		this.velY = -(this.velY);
 	}
 	// Don't bounce off the floor unless it touches the paddle
-	
-	// if (this.y > canvas.height - this.radius) {
-	// 	this.velY = -(this.velY);
-	// }
+
+	if (this.y > canvas.height - this.radius * 1.66) {
+		if (this.x > paddle.x && this.x < paddle.x + paddle.width) {
+			this.velY = -(this.velY);
+		}
+		else {
+			this.lives--;
+			if(!this.lives) {
+				alert("GAME OVER");
+				document.location.reload();
+			}
+			else {
+				this.x = canvas.width / 2;
+				this.y = canvas.height - 30;
+				this.velX = 3;
+				this.velY = 3;
+				paddle.x = canvas.width / 2 - paddle.width / 2;
+			}
+			
+		}
+	}
 
 	this.x += this.velX;
 	this.y += -(this.velY);	
